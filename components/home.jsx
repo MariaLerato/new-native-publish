@@ -1,145 +1,122 @@
-import React, { useEffect, useState } from "react";
-import {  FlatList, StyleSheet,Text,View,TextInput,ScrollView } from "react-native";
-import { ListItem,  Button } from "react-native-elements";
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import Users from "./users";
-import firebase from "./firebase";
+import React,{useState} from 'react'
+import { SafeAreaView, StyleSheet, TextInput, TouchableOpacity,useWindowDimensions } from 'react-native'
+import {View,Text,ScrollView,Image} from 'react-native'
+import SwitchSelector from 'react-native-switch-selector'
+import {Formik } from 'formik'
+import * as Yup from 'yup'
 
-const  Home = ({navigation}) =>{
+const Home = ({navigation}) =>{
+    const [username,setName] = useState('')
+    const [password,setPassword] =useState('')
+    const [ users,setUsers] = useState([])
+    const [options,setOptions] = useState([
+        {label:'Light',value:'1' },
+        {label:'Dark',value:'2'}
+    ])
 
-    const [todo,setTodo] = useState([])
-    const [title,setTitle] = useState('')
-    const [isDone,setIsDone] = useState(false)
-  
-    useEffect(()=>{
-            Users.getData().on('value', snapshot =>{
-                const TodoList = []
-                snapshot.forEach(action =>{
-                const key = action.key
-                const data = action.val()
-            TodoList.push({
-                 key:key,
-                 title:data.title,
-                 done:!isDone
+    const validate = Yup.object({
+        username:Yup.string().required('Missing'),
+        password:Yup.string().max(6,'Only 4-6 characters allowed').required('Missing')
+    })
+
+    const layout = useWindowDimensions()
+    const switchValue = (opt) =>{
+        if(opt =='Light'){
+        const style = StyleSheet.create({
+               backgroundColor:'green',
+               color:'black'
+           }) 
+        }else if (opt =='Dark'){
+            const style = StyleSheet.create({
+                backgroundColor:'white',
+                color:'red'
             })
-            setTodo(TodoList)
-            })
-        })
-    },[])
-    const onCheck = () => {
-        return alert('Task has been completed')
-    }
-    const createDelete =(key)=>{
-        firebase.ref().child(`/todo/${key}`).remove((err)=>{
-            if(err){
-                console.log(err)
-            }
-        })
-    }
-    const createTodo = () =>{
-        const todo = {
-            title:title,
-       
-            done:!isDone,
         }
-        Users.createUsers(todo)
-        .then(()=>  console.log('todo created'))
-        .catch(err => console.log(err))       
     }
-   
-    const displaytodo = ({item,index}) => {
-        return (
-            <View >
-                <ListItem key={ index} style={styles.viewCover}>
-                    <ListItem.Content>
-                        <ListItem.Title>
-                        <MaterialCommunityIcons name={"check"} size={35} color={'red'} onPress={onCheck} /> {item.title} 
-                        </ListItem.Title>
-                        <ListItem.Subtitle>
-                            Status: {item.done}
-                        </ListItem.Subtitle>
-                    </ListItem.Content>
-                    <ListItem.Chevron onPress={()=> navigation.navigate('about',{
-                        itemId : item.key
-                    })} />
-                </ListItem>
-            </View>
-        )
+    const login = ()=>{
+        setUsers([...users,{
+            username:username,
+            password:password
+        }])
+        navigation.navigate('about')
+       
+        setPassword(' ')
     }
     return(
+        <SafeAreaView>
+            <ScrollView>
+                <View style={{  alignItems:'center',marginTop:10,width:layout.width,height:layout.height}}>
+                    <View style={{padding:8,borderRadius:30,borderWidth:10,borderColor:'white',width:'90%',height:'90%', backgroundColor:'#f5f7f6',margin:4}} >
+                    <View style={{marginTop:15}}>
+                        <Image source={require('../assets/mew.jpg')} style={{width:100,height:100,borderRadius:50,borderColor:'white',borderWidth:3,alignSelf:'center'}} />
+                        <Text style={{alignItems:'center',fontSize:35,alignSelf:'center'}}>Maria Fenyane</Text>
+                        <Text style={{fontSize:18,padding:1,alignItems:'center',marginLeft:5,alignSelf:'center',color:'#a9dbde'}}>Polokwane</Text>
+                    </View>
+                    <View style={{padding:8,margin:20,alignItems:'center',height:500}}>
+                     
+                     <Formik
+                      initialValues ={{
+                         username:'',
+                         password:''
+                     }}
+                     validateOnMount={true}
+                     validationSchema={validate}
+                     onSubmit={(values)=>login(values.username,values.password)}
+                     >
+                         {({
+                             errors,
+                             handleBlur,
+                             handleSubmit,
+                             handleChange,
+                             values,
+                             touched
+                         })=>(
+                             <View>
+                                <TextInput placeholder={'Username'} value={values.username} onChangeText={handleChange('username')} onBlur={handleBlur('username')} style={{height:60,backgroundColor:'white',margin:8,padding:8,width:300,borderRadius:20}} />
+                                {errors.username && touched.username ?(
+                                    <Text style={{color:'red',padding:4,alignSelf:'center'}}>{errors.username} </Text>
+                                ):null}
+                                <TextInput  value={values.password} placeholder={'Password'} onChangeText={handleChange('password')} onBlur={handleBlur('password')}  style={{height:60,backgroundColor:'white',margin:8,padding:8,width:300,borderRadius:20}}  />
+                                {errors.password && touched.password ?(
+                                    <Text style={{color:'red',padding:4,alignSelf:'center'}}>{errors.password} </Text>
+                                ):null}
+                        <TouchableOpacity 
+                            style={{
+                                padding:8,
+                                margin:14,
+                                backgroundColor:'lightseagreen',
+                                width:250,
+                                height:50,
+                                borderRadius:20,
+                                borderWidth:2,
+                                borderColor:'white'
+                                }}
+                            onPress={handleSubmit}>
+                            <Text style={{alignSelf:'center',padding:4,color:'white'}}>
+                                Login
+                            </Text>
+                        </TouchableOpacity>
+                            </View>
 
-            <ScrollView style={styles.border}>
-                <View style={styles.viewCover} >
-               
-                    <Text style={{fontFamily:'Algerian',fontSize:35,color:'black',padding:4}}>
-                   Todo App
-                    </Text>
-                    <View style={styles.container}>
-                        <Text>
-                            <TextInput style={styles.textinput} onChangeText={(text) => setTitle(text)} value={title} placeholder={"please enter value"} /> <MaterialCommunityIcons name={"plus"} size={35} color={"white"} onPress={createTodo} style={{backgroundColor:"#8803fc",borderRadius:30} }/>
-                        </Text>
-                        <View style={styles.button}>
-                            <Button title={"Delete All"} onPress={createDelete} />
+                         )}
+                     </Formik>
+                       <Text style={{color:'#71adb0'}}> Forgot Password? Or Sign Up </Text>
+                        <View style={{padding:28,width:300}}>
+                        <SwitchSelector 
+                        options={options}
+                         initial={0}
+                          onPress={(value)=>switchValue(value)}
+                           textColor={'green'}
+                            selectedColor={'white'} 
+                            buttonColor={'#5fa353'}
+                             borderColor={'black'}  
+                             />
                         </View>
-                    </View> 
-                    <View style={styles.viewCover}>
-                        {
-                            todo && todo.length ? (
-                                <FlatList data={todo} renderItem={displaytodo}
-                                keyExtractor={(item)=> item.key}
-                                removeClippedSubviews={true}
-                                />
-
-                                ):(
-                                <View style={{height:700,width:1000}}>
-                                    <Text>
-                                        Nothing scheduled for now
-                                    </Text>
-                                </View>   
-                            )
-                        }
+                    </View>
                     </View>
                 </View>
             </ScrollView>
-
+        </SafeAreaView>
     )
-}
-const styles = StyleSheet.create({
-    viewCover:{
-        
-            borderBottomColor: 'gainsboro',
-            borderBottomWidth: 0.5,
-    },
-    complete:{
-        backgroundColor:'grey'
-    },
-    border:{
-        borderWidth:4,
-        borderColor:'#3ab2bd',
-        height:800
-    },
-    header:{
-        color:'white',
-        padding:2
-    },
-    textinput:{
-    height:50,
-    padding:11,
-    margin:4,
-    borderRadius:10,
-    backgroundColor:'gainsboro',
-    width:300
-    },
-    container:{
-        marginTop:8,
-        padding:4
-    },
-    button:{
-        width:300,
-        alignItems:'left',
-        padding:11,
-        margin:4,
-        marginTop:4
     }
-});
 export default Home

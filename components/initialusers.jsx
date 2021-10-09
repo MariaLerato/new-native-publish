@@ -1,0 +1,15 @@
+import React from "react";
+
+
+class InitialUser {
+    User =[
+        {id:1,title:'The Wrong Husband',img:'https://images.pexels.com/photos/8416930/pexels-photo-8416930.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',subtitle:'Marcy thought she had married the man of her dreams until one night everything changed. It was like her husband was possessed by some evil spirit, well atleast that was what she told her self to avoid reality.Until she couldnt!!'},
+        {id:2,title:'Forced Into Marriage',img:'https://images.pexels.com/photos/6669840/pexels-photo-6669840.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',subtitle:'Flirting with gorgeous man she didnt know was like a hobby to Katlego,until she met her match. A man who could flirt the pants off any girl. What they both dont know? Their marriage was arranged way before they were born'},
+        {id:3,title:'The Alpha King',img:'https://images.pexels.com/photos/39310/wolf-predator-hunter-canis-lupus-39310.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',subtitle:'He was a murderer,plain simple. He didnt care of your gender as long as you had something he needed he killed. No negotiations, no nothing. Until he ordered the assassination of his own mate, the one he has been waiting for, for 150 years '},
+        {id:4,title:'The Red Door',img:'https://images.pexels.com/photos/3303491/pexels-photo-3303491.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',subtitle:'Dont ever open that door, they said. No matter what you may hear from that room, dont even breathe in its direction. But Maurin was a curious girl with a love for adventure. But curiosity killed a cat right? Well satisfaction brought it back, or did it?'},
+        {id:5,title:'Darkness Is Her Only Friend',img:'https://images.pexels.com/photos/897624/pexels-photo-897624.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',subtitle:'They say light chases out darkness, but sometimes the light is worse than the darkness can ever be. Well atleast thats what Athea thinks.She has seen the worst of the world and now her only objective is to protect her child from this bad bad world'},
+        {id:6,title:'Guidelines to  marriage',img:'https://images.pexels.com/photos/2226/food-couple-sweet-married.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500',subtitle:'Planning a wedding?Piece of cake. Actually staying in that marriage for more than 2years? Now that was the pain in the ass for Aron especially when you are married to a psycho.A girl who was soo insecure that she even got jealous when his own mother hugged him. Well it was fun while it lasted'},
+        {id:7,title:'Lonely',img:'https://images.pexels.com/photos/1510149/pexels-photo-1510149.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',subtitle:'Infront of the world,she was bubbly,cheerful,and even annoying sometimes. But at home,she was a lonely cat woman. Heck even her cats shooked their heads everytime she came home from a bad date.She was the worst in choosing the right guy for her. Maybe her calling is to be a nun, it is just not possible for some to have this many failed relationships,or atleast thats what her friends tell her'}
+]
+}
+export default new   InitialUser()
